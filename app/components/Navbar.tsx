@@ -16,7 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Menu, X } from "lucide-react";
+import { AlignRight, X } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 
 import nav_logo from "../assets/nav_logo.png";
@@ -57,10 +57,30 @@ export default function Navbar() {
     {
       name: "AI Assistant",
       subItems: [
-        { title: "Resume Suggestions", path: "/ai/resume" },
-        { title: "Cover Letter Generator", path: "/ai/cover-letter" },
-        { title: "Visual Enhancer", path: "/ai/visual-enhancer" },
-        { title: "Interview Q&A", path: "/ai/interview" },
+        {
+          title: "Resume Suggestions",
+          path: "/ai/resume",
+          description:
+            "Enhance bullet points, add role-specific keywords, and improve phrasing for better impact.",
+        },
+        {
+          title: "Cover Letter Generator",
+          path: "/ai/cover-letter",
+          description:
+            "Generate personalized cover letters based on your resume and job description.",
+        },
+        {
+          title: "Visual Enhancer",
+          path: "/ai/visual-enhancer",
+          description:
+            "Automatically suggest improved resume layouts and formatting that match your content.",
+        },
+        {
+          title: "Interview Q&A",
+          path: "/ai/interview",
+          description:
+            "Get common interview questions and suggested answers tailored to your resume and role.",
+        },
       ],
     },
   ];
@@ -95,15 +115,20 @@ export default function Navbar() {
                     <NavigationMenuTrigger className="text-muted-foreground hover:text-accent-foreground px-4 py-2 text-sm rounded-md">
                       {item.name}
                     </NavigationMenuTrigger>
-                    <NavigationMenuContent className="p-4 bg-popover rounded-md shadow-xl w-fit">
-                      <ul className="space-y-3 w-40">
+                    <NavigationMenuContent className="p-4 bg-popover rounded-md shadow-xl w-fit ">
+                      <ul className="grid gap-4 md:grid-cols-2 w-[500px] lg:w-[430px]">
                         {item.subItems.map((sub) => (
-                          <li key={sub.title}>
-                            <Link
-                              href={sub.path}
-                              className="block text-sm text-muted-foreground hover:text-primary transition"
-                            >
-                              {sub.title}
+                          <li
+                            key={sub.title}
+                            className="group bg-muted/30 hover:bg-muted p-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
+                          >
+                            <Link href={sub.path} className="block space-y-1">
+                              <h3 className="text-sm font-semibold text-primary group-hover:underline">
+                                {sub.title}
+                              </h3>
+                              <p className="text-xs text-muted-foreground leading-snug">
+                                {sub.description}
+                              </p>
                             </Link>
                           </li>
                         ))}
@@ -138,7 +163,7 @@ export default function Navbar() {
             onClick={() => setMobileOpen(!mobileOpen)}
             className="focus:outline-none"
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileOpen ? <X size={24} /> : <AlignRight size={24} />}
           </button>
         </div>
       </div>
