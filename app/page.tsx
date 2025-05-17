@@ -2,7 +2,6 @@ import CTASection from "./components/Home/CTASection";
 import FeatureHighlights from "./components/Home/FeatureHighlights";
 import Footer from "./components/Home/Footer";
 import HeroSection from "./components/Home/HeroSection";
-import Testimonials from "./components/Home/Testimonials";
 import WhyChooseUs from "./components/Home/WhyChooseUs";
 
 export default function Home() {
@@ -14,7 +13,6 @@ export default function Home() {
         <HeroSection />
         <FeatureHighlights />
         <WhyChooseUs />
-        <Testimonials />
         <CTASection />
         <Footer />
       </div>
