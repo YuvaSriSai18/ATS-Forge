@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-
+import Image from "next/image";
 const testimonials = [
   {
     name: "Ananya Sharma",
@@ -41,7 +41,7 @@ const Testimonials = () => {
               className="bg-gray-50 dark:bg-gray-900 rounded-xl shadow-md p-6 text-left hover:shadow-lg transition"
             >
               <div className="flex items-center gap-4 mb-4">
-                <img
+                <Image
                   src={image}
                   alt={name}
                   className="w-12 h-12 rounded-full object-cover border-2 border-gray-300"
