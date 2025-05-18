@@ -2,14 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* --------------------------------------------
+   Custom Utilities
+-------------------------------------------- */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
 
-
-
+/* --------------------------------------------
+   CSS Variables (Light and Dark Themes)
+-------------------------------------------- */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -38,6 +42,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -66,13 +71,45 @@
   }
 }
 
-
-
+/* --------------------------------------------
+   Base Styles
+-------------------------------------------- */
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* --------------------------------------------
+   Print Styles (Global because of print)
+-------------------------------------------- */
+@media print {
+  .resume-preview {
+    width: 210mm;
+    height: 297mm;
+    padding: 20mm;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: black;
+    background: white;
+    box-shadow: none;
+    overflow: hidden;
+    page-break-after: always;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .resume-preview,
+  .resume-preview * {
+    visibility: visible;
   }
 }

@@ -1,0 +1,46 @@
+/* 
+.resumePreview {
+  width: 794px; 
+  max-height: 1123px;
+  margin: auto;
+  background: white;
+  padding: 2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  color: #000;
+}
+
+.header {
+  text-align: center;
+}
+
+.section {
+  margin-bottom: 1rem;
+}
+
+.sectionHeading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 0.5rem;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.linkRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.mb2 {
+  margin-bottom: 0.5rem;
+} */
+
+
+.fontFamily {
+  font-family: source-serif-4, serif;
+}
