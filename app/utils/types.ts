@@ -41,7 +41,8 @@ export interface Achievement {
 export interface Position {
   position: string;
   organization: string;
-  duration: string;
+  startDate: string,
+  endDate: string,
   contributions: string;
 }
 
