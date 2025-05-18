@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { ResumeData } from "../utils/types";
+import { ResumeData, ResumeArrayFields, ResumeArrayKeys } from "../utils/types";
 import { Input } from "@/components/ui/input";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,32 +38,47 @@ export default function Build_Resume() {
     publications: [],
   });
 
-  // Generic function to handle input changes for dynamic arrays
-  const handleDynamicChange = (
-    section: keyof ResumeData,
+  const handleDynamicChange = <
+    Section extends ResumeArrayKeys,
+    Field extends keyof ResumeArrayFields[Section]
+  >(
+    section: Section,
     index: number,
-    field: string,
-    value: any
+    field: Field,
+    value: ResumeArrayFields[Section][Field]
   ) => {
     setFormData((prev) => {
-      const updatedSection = [...(prev[section] as any)];
-      updatedSection[index][field] = value;
+      const updatedSection = [
+        ...(prev[section] as ResumeArrayFields[Section][]),
+      ];
+      updatedSection[index] = {
+        ...updatedSection[index],
+        [field]: value,
+      };
       return { ...prev, [section]: updatedSection };
     });
   };
 
-  // Add item to a section
-  const handleAdd = (section: keyof ResumeData, emptyItem: any) => {
+  // Add an empty item to a dynamic section
+  const handleAdd = (
+    section: ResumeArrayKeys,
+    emptyItem: ResumeArrayFields[typeof section]
+  ) => {
     setFormData((prev) => ({
       ...prev,
-      [section]: [...(prev[section] as any), emptyItem],
+      [section]: [
+        ...(prev[section] as ResumeArrayFields[typeof section][]),
+        emptyItem,
+      ],
     }));
   };
 
-  // Remove item from a section
-  const handleRemove = (section: keyof ResumeData, index: number) => {
+  // Remove an item by index from a dynamic section
+  const handleRemove = (section: ResumeArrayKeys, index: number) => {
     setFormData((prev) => {
-      const updatedSection = [...(prev[section] as any)];
+      const updatedSection = [
+        ...(prev[section] as ResumeArrayFields[typeof section][]),
+      ];
       updatedSection.splice(index, 1);
       return { ...prev, [section]: updatedSection };
     });
@@ -306,7 +321,7 @@ export default function Build_Resume() {
                   handleDynamicChange(
                     "workExperience",
                     index,
-                    "title",
+                    "jobTitle",
                     e.target.value
                   )
                 }
@@ -318,7 +333,7 @@ export default function Build_Resume() {
                   handleDynamicChange(
                     "workExperience",
                     index,
-                    "company",
+                    "companyName",
                     e.target.value
                   )
                 }
@@ -373,8 +388,8 @@ export default function Build_Resume() {
           <Button
             onClick={() =>
               handleAdd("workExperience", {
-                title: "",
-                company: "",
+                jobTitle: "",
+                companyName: "",
                 startDate: "",
                 endDate: "",
                 responsibilities: "",
