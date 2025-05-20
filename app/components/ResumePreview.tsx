@@ -1,273 +1,353 @@
-"use client";
 import React from "react";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Link,
+} from "@react-pdf/renderer";
 import { ResumeData } from "../utils/types";
 
-interface Props {
-  data: ResumeData;
-}
-import styles from '../ui/ResumePreview.module.css'
-const ResumePreview: React.FC<Props> = ({ data }) => {
-  const formatDate = (dateStr: string) =>
-    new Date(dateStr).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short", // or "long" for full month name
-    });
+// Create styles
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: "column",
+    backgroundColor: "#FFFFFF",
+    padding: 14,
+    fontFamily: "Helvetica",
+    fontSize: 11,
+  },
+  section: {
+    // marginBottom: 10,
+    paddingBottom: 1,
+    // borderBottom: "1 solid #000",
+    marginTop: 1,
+  },
+  header: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#000",
+  },
+  subheader: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 3,
+  },
+  text: {
+    fontSize: 11,
+    marginBottom: 3,
+  },
+  bold: {
+    fontWeight: "bold",
+  },
+  link: {
+    color: "#0000EE",
+    textDecoration: "underline",
+  },
+  contactRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 3,
+    flexWrap: "wrap",
+    fontSize: "12px",
+  },
+  contactItem: {
+    marginHorizontal: 5,
+  },
+  nameHeader: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#333333",
+    borderBottom: "1 solid #000",
+    paddingBottom: 2,
+  },
+  entryContainer: {
+    marginBottom: 4,
+  },
+  bulletPoint: {
+    marginLeft: 10,
+    marginBottom: 4,
+    textAlign: "justify",
+  },
+});
+const formatDate = (dateStr: string) =>
+  new Date(dateStr).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short", // or "long" for full month name
+  });
+const ResumePreview = ({ data }: { data: ResumeData }) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      {/* Header with Name and Contact */}
+      <View style={styles.section}>
+        <Text style={styles.nameHeader}>{data.name}</Text>
 
-  return (
-    <div className={`${styles.fontFamily} max-w-4xl mx-auto p-6 border dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg`}>
-      {/* Header */}
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">{data.name}</h1>
-        <p className="text-sm space-x-2 flex flex-wrap justify-center gap-2">
-          {data.email && <a href={`mailto:${data.email}`}>{data.email}</a>} |
-          {data.mobile && <a href={`tel:${data.mobile}`}>{data.mobile}</a>} |
-          {data.location && <span>{data.location}</span>} |
-          {data.linkedin && (
-            <a
-              href={data.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              LinkedIn
-            </a>
-          )}{" "}
-          |
-          {data.github && (
-            <a
-              href={data.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              GitHub
-            </a>
-          )}{" "}
-          |
-          {data.portfolio && (
-            <a
-              href={data.portfolio}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              Portfolio
-            </a>
+        <View style={styles.contactRow}>
+          {data.email && (
+            <Text style={styles.contactItem}>
+              <Link src={`mailto:${data.email}`}>{data.email}</Link>
+            </Text>
           )}
-        </p>
-      </div>
+          {data.mobile && (
+            <Text style={styles.contactItem}>
+              <Link src={`tel:${data.mobile}`}>{data.mobile}</Link>
+            </Text>
+          )}
+          {data.location && (
+            <Text style={styles.contactItem}>{data.location}</Text>
+          )}
+          {data.linkedin && (
+            <Text style={styles.contactItem}>
+              <Link src={data.linkedin}>Linked In</Link>
+            </Text>
+          )}
+          {data.github && (
+            <Text style={styles.contactItem}>
+              <Link src={data.github}>Github</Link>
+            </Text>
+          )}
+          {data.portfolio && (
+            <Text style={styles.contactItem}>
+              <Link src={data.portfolio}>Portfolio</Link>
+            </Text>
+          )}
+        </View>
+      </View>
 
       {/* Summary */}
       {data.summary && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Summary
-          </h2>
-          <p className="text-justify leading-snug font-normal">{data.summary}</p>
-        </div>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Professional Summary</Text>
+          <Text>{data.summary}</Text>
+        </View>
       )}
-
       {/* Work Experience */}
-      {data.workExperience.length > 0 && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Work Experience
-          </h2>
-          {data.workExperience.map((exp, idx) => (
-            <div key={idx} className="mb-2">
-              <p className="font-bold">
-                {exp.jobTitle} - {exp.companyName}
+      {data.workExperience.length > 0 && data.workExperience[0].companyName && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Work Experience</Text>
 
-                <span className="float-right text-sm">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</span>
-              </p>
-              <ul className="list-disc list-inside leading-snug font-serif">
-                {exp.responsibilities
-                  .split(".")
-                  .map(
-                    (item, i) => item.trim() && <li key={i}>{item.trim()}</li>
-                  )}
-              </ul>
-            </div>
+          {data.workExperience.map((job, i) => (
+            <View key={i} style={styles.entryContainer}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={styles.bold}>
+                  {job.jobTitle} - {job.companyName}
+                </Text>
+                <Text>
+                  {formatDate(job.startDate)} -{" "}
+                  {job.endDate ? formatDate(job.endDate) : "Present"}
+                </Text>
+              </View>
+
+              {job.responsibilities
+                .split(".")
+                .filter((point) => point.trim())
+                .map((point, j) => (
+                  <Text key={j} style={styles.bulletPoint}>
+                    • {point.trim()}
+                  </Text>
+                ))}
+            </View>
           ))}
-        </div>
+        </View>
       )}
 
       {/* Skills */}
       {(data.skills.technical.length > 0 ||
         data.skills.softSkills.length > 0) && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Skills
-          </h2>
-          {data.skills.technical.length > 0 && (
-            <p>
-              <span className="font-semibold">Technical:</span>{" "}
-              {data.skills.technical.join(", ")}
-            </p>
-          )}
-          {data.skills.softSkills.length > 0 && (
-            <p>
-              <span className="font-semibold">Soft Skills:</span>{" "}
-              {data.skills.softSkills.join(", ")}
-            </p>
-          )}
-        </div>
-      )}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Skills</Text>
 
-      {/* Projects */}
-      {data.projects.length > 0 && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Projects
-          </h2>
-          {data.projects.map((project, idx) => (
-            <div key={idx} className="mb-1">
-              <p className="font-bold">
-                {project.title}
-                <span className="font-normal text-sm ml-2">
-                  | {project.techStack.join(", ")}
-                  {project.demoLink && (
-                    <>
-                      {" "}
-                      |
-                      <a
-                        href={project.demoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ml-1 underline"
-                      >
-                        Project Link
-                      </a>
-                    </>
-                  )}
-                </span>
-              </p>
-              <ul className="list-disc list-inside leading-snug font-serif">
-                {project.description
-                  .split(".")
-                  .map((item, i) =>
-                    item.trim() ? <li key={i} className="text-justify">{item.trim()}</li> : null
-                  )}
-              </ul>
-            </div>
-          ))}
-        </div>
+          {data.skills.technical.length > 0 && (
+            <View style={styles.entryContainer}>
+              <Text>
+                <Text style={styles.bold}>Technical: </Text>
+                {data.skills.technical.join(", ")}
+              </Text>
+            </View>
+          )}
+
+          {data.skills.softSkills.length > 0 && (
+            <View style={styles.entryContainer}>
+              <Text>
+                <Text style={styles.bold}>Soft Skills: </Text>
+                {data.skills.softSkills.join(", ")}
+              </Text>
+            </View>
+          )}
+        </View>
       )}
 
       {/* Education */}
-      {data.education.length > 0 && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Education
-          </h2>
-          {data.education.map((edu, idx) => (
-            <div key={idx} className="mb-2">
-              <p className="font-semibold">
-                {edu.degreeName} - {edu.institution}, {edu.location}
+      {data.education.length > 0 && data.education[0].institution && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Education</Text>
 
-                <span className="float-right font-normal text-sm"> {formatDate(edu.startYear)} - {formatDate(edu.endYear)} </span>
-              </p>
-              <p className="text-sm">
-               <li>CGPA: {edu.cgpa}</li>
-              </p>
-            </div>
+          {data.education.map((edu, i) => (
+            <View key={i} style={styles.entryContainer}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={styles.bold}>
+                  {edu.degreeName} - {edu.institution}
+                </Text>
+                <Text>
+                  {formatDate(edu.startYear)} -{" "}
+                  {formatDate(edu.endYear) || "Present"}
+                </Text>
+              </View>
+              {edu.cgpa && (
+                <Text style={{ marginLeft: "10px" }}>CGPA: {edu.cgpa}</Text>
+              )}
+            </View>
           ))}
-        </div>
+        </View>
+      )}
+
+      {/* Projects */}
+      {data.projects.length > 0 && data.projects[0].title && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Projects</Text>
+
+          {data.projects.map((project, i) => (
+            <View key={i} style={styles.entryContainer}>
+              <Text style={styles.bold}>
+                {project.title} |{" "}
+                {project.techStack.length > 0 && (
+                  <Text style={{ fontWeight: "normal" }}>
+                    {project.techStack.join(", ")}
+                  </Text>
+                )}
+                {project.demoLink && (
+                  <Text>
+                    {" "}
+                    |{" "}
+                    <Link
+                      src={project.demoLink}
+                      style={{ color: "#000", fontWeight: "normal" }}
+                    >
+                      Project Link
+                    </Link>
+                  </Text>
+                )}
+              </Text>
+              <Text>
+                {project.description
+                  .split(".")
+                  .filter((point) => point.trim())
+                  .map((point, j) => (
+                    <Text key={j} style={styles.bulletPoint}>
+                      • {point.trim() + "\n"}
+                    </Text>
+                  ))}
+              </Text>
+            </View>
+          ))}
+        </View>
       )}
 
       {/* Certifications */}
-      {data.certifications.length > 0 && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Certifications
-          </h2>
-          {data.certifications.map((cert, idx) => (
-            <li key={idx}>
-              <a
-                href={cert.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                {cert.name}
-              </a>
-            </li>
+      {data.certifications.length > 0 && data.certifications[0].name && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Certifications</Text>
+
+          {data.certifications.map((cert, i) => (
+            <View key={i} style={styles.entryContainer}>
+              <Text>
+                <Link src={cert.link} style={{ color: "#000" }}>
+                  {cert.name}
+                </Link>
+              </Text>
+            </View>
           ))}
-        </div>
+        </View>
       )}
 
       {/* Achievements */}
-      {data.achievements.length > 0 && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Achievements
-          </h2>
-          {data.achievements.map((ach, idx) => (
-            <div key={idx} className="mt-1">
-              <p className="font-semibold">
-                {ach.title} :{" "}
-                <span className="font-normal">{ach.description}</span>
-              </p>
-            </div>
+      {data.achievements.length > 0 && data.achievements[0].title && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Achievements</Text>
+
+          {data.achievements.map((achievement, i) => (
+            <View key={i} style={styles.entryContainer}>
+              <Text style={styles.bold}>
+                {achievement.title} :{" "}
+                <Text style={{ fontWeight: "normal" }}>
+                  {achievement.description}
+                </Text>
+              </Text>
+            </View>
           ))}
-        </div>
+        </View>
       )}
 
       {/* Positions of Responsibility */}
-      {data.positionOfResponsibility.length > 0 && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Positions of Responsibility
-          </h2>
-          {data.positionOfResponsibility.map((pos, idx) => (
-            <div key={idx} className="mb-2">
-              <div className="flex justify-between">
-                <p className="font-bold">
-                  {pos.position} - {pos.organization}
-                </p>
-                <p className="text-sm">
-                  {formatDate(pos.startDate)} - {formatDate(pos.endDate)}
-                </p>
-              </div>
-              <ul className="list-disc list-inside leading-snug font-normal">
-                {pos.contributions
-                  .split(".")
-                  .map(
-                    (item, i) => item.trim() && <li key={i}>{item.trim()}</li>
-                  )}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
+      {data.positionOfResponsibility.length > 0 &&
+        data.positionOfResponsibility[0].position && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Positions of Responsibility</Text>
+
+            {data.positionOfResponsibility.map((position, i) => (
+              <View key={i} style={styles.entryContainer}>
+                <Text style={styles.bold}>
+                  {position.position} at {position.organization}
+                </Text>
+                {/* <Text>{position.duration}</Text> */}
+                <Text>
+                  {position.contributions
+                    .split(".")
+                    .filter((point) => point.trim())
+                    .map((point, i) => (
+                      <Text key={i} style={styles.bulletPoint}>
+                        • {point.trim() + "\n"}
+                      </Text>
+                    ))}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
 
       {/* Publications */}
-      {data.publications.length > 0 && (
-        <div className="mb-1">
-          <h2 className="text-xl font-bold border-b border-gray-300 dark:border-gray-700 mb-1">
-            Publications
-          </h2>
-          {data.publications.map((pub, idx) => (
-            <div key={idx} className="mb-2">
-              <p className="font-semibold">{pub.title}</p>
-              <p>{pub.authors}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {pub.conference} | {pub.date}
-              </p>
-              <a
-                href={pub.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                View
-              </a>
-            </div>
+      {data.publications.length > 0 && data.publications[0].title && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Publications</Text>
+
+          {data.publications.map((publication, i) => (
+            <View key={i} style={styles.entryContainer}>
+              <Text style={styles.bold}>{publication.title}</Text>
+              <Text>
+                {publication.conference}
+                {publication.date ? ` - ${publication.date}` : ""}
+              </Text>
+              <Text>{publication.authors}</Text>
+              {publication.link && (
+                <Text style={styles.link}>{publication.link}</Text>
+              )}
+            </View>
           ))}
-        </div>
+        </View>
       )}
-    </div>
-  );
-};
+    </Page>
+  </Document>
+);
 
 export default ResumePreview;

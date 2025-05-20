@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { ResumeData, ResumeArrayFields, ResumeArrayKeys } from "../utils/types";
 import { Input } from "@/components/ui/input";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
@@ -11,8 +11,10 @@ type CreateResumeFormProps = {
   setFormData: React.Dispatch<React.SetStateAction<ResumeData>>;
 };
 
-
-export default function Create_Resume_Form({formData, setFormData }: CreateResumeFormProps) {
+export default function Create_Resume_Form({
+  formData,
+  setFormData,
+}: CreateResumeFormProps) {
   const handleDynamicChange = <
     Section extends ResumeArrayKeys,
     Field extends keyof ResumeArrayFields[Section]
@@ -58,12 +60,12 @@ export default function Create_Resume_Form({formData, setFormData }: CreateResum
       return { ...prev, [section]: updatedSection };
     });
   };
-  useEffect(() => {
-    const data = localStorage.getItem("resumeData");
-    if (data) {
-      setFormData(JSON.parse(data));
-    }
-  }, [setFormData]);
+  // useEffect(() => {
+  //   const data = localStorage.getItem("resumeData");
+  //   if (data) {
+  //     setFormData(JSON.parse(data));
+  //   }
+  // }, [setFormData]);
   const submitForm = () => {
     localStorage.setItem("resumeData", JSON.stringify(formData));
     // setResumeData(formData)
@@ -542,9 +544,7 @@ export default function Create_Resume_Form({formData, setFormData }: CreateResum
             </Card>
           ))}
           <Button
-            onClick={() =>
-              handleAdd("certifications", { name: "", link: "" })
-            }
+            onClick={() => handleAdd("certifications", { name: "", link: "" })}
             className="w-3/4 m-auto"
           >
             + Add Certificate

@@ -2,13 +2,13 @@
 import React, { useState } from "react";
 import Create_Resume_Form from "../components/Create_Resume_Form";
 import ResumePreview from "../components/ResumePreview";
-import { ResumeData } from "../utils/types";
+import { ResumeData as ResumeDataType } from "../utils/types";
 import { Button } from "@/components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
+import { PDFViewer } from "@react-pdf/renderer";
 
-import { Eye } from 'lucide-react';
-import { EyeOff } from 'lucide-react';
 export default function Build_Preview_Resume() {
-  const [ResumeData, setResumeData] = useState<ResumeData>({
+  const [resumeData, setResumeData] = useState<ResumeDataType>({
     name: "",
     email: "",
     mobile: "",
@@ -39,22 +39,35 @@ export default function Build_Preview_Resume() {
     publications: [],
   });
 
-  const [Preview, setPreview] = useState(false);
+  const [preview, setPreview] = useState(false);
+
   return (
-    <div>
-      <Button onClick={() => setPreview(!Preview)} className="text-black hover:text-white float-right" >{Preview ? <Eye className="text-black dark:text-white"/> : <EyeOff/>}</Button>
-      <div className="flex justify-between p-5">
-        {!Preview && (
-          <div className="w-1/2 m-auto">
+    <div className="relative min-h-screen">
+      <Button
+        onClick={() => setPreview(!preview)}
+        className="right-0 fixed mr-4 mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-md z-50"
+      >
+        {preview ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+      </Button>
+
+      <div className="flex justify-center items-start p-5">
+        {!preview ? (
+          <div className="w-full lg:w-2/3">
             <Create_Resume_Form
               setFormData={setResumeData}
-              formData={ResumeData}
+              formData={resumeData}
             />
           </div>
-        )}
-        {Preview && (
-          <div className="m-auto">
-            <ResumePreview data={ResumeData} />
+        ) : (
+          <div className="w-full h-screen">
+            <PDFViewer
+              width="80%"
+              height="100%"
+              style={{ margin: "auto" }}
+              showToolbar={true}
+            >
+              <ResumePreview data={resumeData} />
+            </PDFViewer>
           </div>
         )}
       </div>
