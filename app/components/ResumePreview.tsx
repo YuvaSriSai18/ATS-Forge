@@ -48,10 +48,10 @@ const styles = StyleSheet.create({
   },
   contactRow: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 3,
-    flexWrap: "wrap",
-    fontSize: "12px",
+    justifyContent: "center",
+    // marginBottom: 3,
+    // flexWrap: "wrap",
+    fontSize: "10px",
   },
   contactItem: {
     marginHorizontal: 5,
@@ -84,6 +84,12 @@ const formatDate = (dateStr: string) =>
     year: "numeric",
     month: "short", // or "long" for full month name
   });
+const getUsername = (link: string) => {
+  let arr = link.split("/").filter(Boolean);
+  const username = arr[arr.length - 1];
+  // console.log(username);
+  return username;
+};
 const ResumePreview = ({ data }: { data: ResumeData }) => (
   <Document>
     <Page size="A4" style={styles.page}>
@@ -107,12 +113,12 @@ const ResumePreview = ({ data }: { data: ResumeData }) => (
           )}
           {data.linkedin && (
             <Text style={styles.contactItem}>
-              <Link src={data.linkedin}>Linked In</Link>
+              <Link src={data.linkedin}>{`linkedin.com/in/${getUsername(data.linkedin)}`}</Link>
             </Text>
           )}
           {data.github && (
             <Text style={styles.contactItem}>
-              <Link src={data.github}>Github</Link>
+              <Link src={data.github}>{`github.com/${getUsername(data.github)}`}</Link>
             </Text>
           )}
           {data.portfolio && (

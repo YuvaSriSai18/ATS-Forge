@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React , {useEffect} from "react";
 import { ResumeData, ResumeArrayFields, ResumeArrayKeys } from "../utils/types";
 import { Input } from "@/components/ui/input";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
@@ -60,12 +60,12 @@ export default function Create_Resume_Form({
       return { ...prev, [section]: updatedSection };
     });
   };
-  // useEffect(() => {
-  //   const data = localStorage.getItem("resumeData");
-  //   if (data) {
-  //     setFormData(JSON.parse(data));
-  //   }
-  // }, [setFormData]);
+  useEffect(() => {
+    const data = localStorage.getItem("resumeData");
+    if (data) {
+      setFormData(JSON.parse(data));
+    }
+  }, [setFormData]);
   const submitForm = () => {
     localStorage.setItem("resumeData", JSON.stringify(formData));
     // setResumeData(formData)
