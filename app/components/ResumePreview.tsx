@@ -85,7 +85,7 @@ const formatDate = (dateStr: string) =>
     month: "short", // or "long" for full month name
   });
 const getUsername = (link: string) => {
-  let arr = link.split("/").filter(Boolean);
+  const arr = link.split("/").filter(Boolean);
   const username = arr[arr.length - 1];
   // console.log(username);
   return username;

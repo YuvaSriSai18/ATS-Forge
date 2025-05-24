@@ -59,7 +59,7 @@ export default function Navbar() {
       subItems: [
         {
           title: "Resume Suggestions",
-          path: "/ai/resume",
+          path: "/ai/resume-suggestions",
           description:
             "Enhance bullet points, add role-specific keywords, and improve phrasing for better impact.",
         },
